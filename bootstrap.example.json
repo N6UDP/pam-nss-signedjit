@@ -1,0 +1,25 @@
+{
+    "version" : 0,
+    "jitbyhost" : [
+        {
+            "host" : "ahost",
+            "user" : "auser",
+            "expiration" : "2018-09-03T09:33:54Z"
+        },
+        {
+            "host" : "*",
+            "user" : "auser2",
+            "expiration" : "2018-09-03T09:33:54Z"
+        }
+    ],
+    "users" : {
+        "auser" : {"uid": 2000, "keys" : "ssh-rsa KEY COMMENT" },
+        "auser2": {"uid": 2001, "shell": "/bin/zsh", "keys" : "ssh-rsa KEY COMMENT" }
+    },
+    "certs" : [
+        "-----BEGIN CERTIFICATE-----\nNEWLINESEPERATEDPUBLICKEYMAXLENGTH76PERLINE\n-----END CERTIFICATE-----"
+    ],
+    "urls" : [
+        "https://pathandsastokentosignedjitfile"
+    ]
+}
