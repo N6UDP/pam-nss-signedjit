@@ -18,7 +18,7 @@ It intended to be used with:
 
 ```
 gzip bootstrap.example.json
-openssl cms -sign -in cat bootstrap.example.json.gz -text -outform pem -out jit.signed -signer acert.pem
+openssl cms -sign -in bootstrap.example.json.gz -text -outform pem -out jit.signed -signer acert.pem
 ```
 
 * via `certsign.ps1`
@@ -56,3 +56,17 @@ AuthorizedKeysCommandUser nobody
 10. Add a common-auth entry `auth    requisite      pam_listfile.so item=user sense=allow file=/var/lib/pam-nss-signedjit/jitedusers onerr=fail`
     * If you want separate break-glass allow list you can use `[success=1 default=ignore]` instead of `requisite` and a second pam_listfile.so line with `requisite`
 11. Add a common-session entry `session required    pam_mkhomedir.so skel=/etc/skel/ umask=0022`
+
+TODO:
+* Serial number rollover; in practice this really shouldn't matter as python will handle int64 which is quite large
+    * move to date+serial
+* Add docs for running cron job as non-root
+* Verify sign 2x for user update 
+* breakglass groups
+* switches for enabling updating signing keys / urls
+* ssh cert support
+* cert auth against endpoint?
+* x509 cert extraction? (add side?)
+* jit only mode
+* sample C# service
+* logoff expired jit option

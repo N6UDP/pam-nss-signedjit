@@ -1,5 +1,6 @@
 ﻿#reads from .\bootstrap.example.json
-$Cert = (gi Cert:\CurrentUser\My\CERTTHUMBPRINT)
+$Cert1 = (gi Cert:\CurrentUser\My\CERTTHUMBPRINT1)
+$Cert2 = (gi Cert:\CurrentUser\My\CERTTHUMBPRINT2)
 $file = (gc .\bootstrap.example.json)
 $arr=[byte[]]([Text.Encoding]::UTF8.GetBytes($file))
 $ms = New-Object System.IO.MemoryStream
@@ -9,17 +10,24 @@ $gzip.Close()
 $ms.Close()
 $compressed=$ms.ToArray()
 
+function Sign-CMSMessage($cert,$signedcms) {
+    $signer = New-Object Security.Cryptography.Pkcs.CmsSigner
+    $signer.Certificate=$Cert
+    $signer.DigestAlgorithm.FriendlyName = "sha256"
+    $signer.SignedAttributes.Add((New-Object Security.Cryptography.Pkcs.Pkcs9SigningTime))
+    $signer.SignerIdentifierType = $ski
+    $signer.IncludeOption = [System.Security.Cryptography.X509Certificates.X509IncludeOption]::EndCertOnly
+    $signedcms.ComputeSignature($signer)
+}
+
 [System.Reflection.Assembly]::LoadWithPartialName("System.Security") | Out-Null
 $contentinfo = New-Object Security.Cryptography.Pkcs.ContentInfo -argumentList (,$compressed)
-$signer = New-Object Security.Cryptography.Pkcs.CmsSigner
-$signer.Certificate=$Cert
-$signer.DigestAlgorithm.FriendlyName = "sha256"
-$signer.SignedAttributes.Add((New-Object Security.Cryptography.Pkcs.Pkcs9SigningTime))
+
 $ski=[System.Security.Cryptography.Pkcs.SubjectIdentifierType]::SubjectKeyIdentifier
-$signer.SignerIdentifierType = $ski
-$signer.IncludeOption = [System.Security.Cryptography.X509Certificates.X509IncludeOption]::EndCertOnly
+
 $signedcms=New-Object Security.Cryptography.Pkcs.SignedCms($ski,$contentinfo,$false)
-$signedcms.ComputeSignature($signer)
+Sign-CMSMessage -cert $cert1 -signedcms $signedcms
+Sign-CMSMessage -cert $cert2 -signedcms $signedcms
 $base64string = [Convert]::ToBase64String($signedcms.Encode(),"InsertLineBreaks")
 
 $string = . {
