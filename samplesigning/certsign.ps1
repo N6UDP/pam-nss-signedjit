@@ -1,7 +1,7 @@
 ﻿#reads from .\bootstrap.example.json
-$Cert1 = (gi Cert:\CurrentUser\My\CERTTHUMBPRINT1)
-$Cert2 = (gi Cert:\CurrentUser\My\CERTTHUMBPRINT2)
-$file = (gc .\bootstrap.example.json)
+$Cert1 = (Get-Item Cert:\CurrentUser\My\CERTTHUMBPRINT1)
+$Cert2 = (Get-Item Cert:\CurrentUser\My\CERTTHUMBPRINT2)
+$file = (Get-Content .\bootstrap.example.json)
 $arr=[byte[]]([Text.Encoding]::UTF8.GetBytes($file))
 $ms = New-Object System.IO.MemoryStream
 $gzip = New-Object System.IO.Compression.GzipStream $ms, ([IO.Compression.CompressionMode]::Compress)

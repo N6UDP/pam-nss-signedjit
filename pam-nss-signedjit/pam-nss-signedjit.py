@@ -70,7 +70,7 @@ with open(rootpath+'validated.json') as f:
 #pprint(args)
 
 if args.subparser_name == 'sshkey':
-    print data['users'].get(args.username,{'keys':''}).get('keys',None)
+    print(data['users'].get(args.username,{'keys':''}).get('keys',None))
 
 
 if args.subparser_name == 'update':
@@ -96,9 +96,11 @@ if args.subparser_name == 'update':
                 if ret2 == 0:
                     with open(varpath+"signedtext.json") as st:
                         stjson = json.load(st)
-                        if stjson['version'] > data['version']:
+                        if stjson['serial'] > data['serial']:
                             shutil.copy(varpath+"signedtext.json",rootpath+'validated.json')
                             data=stjson
                             updatecerts()
                         updatejit()
 
+if __name__ == '__main__':
+    sys.exit(main())

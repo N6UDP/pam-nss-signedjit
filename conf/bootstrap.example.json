@@ -1,5 +1,6 @@
 {
-    "version" : 0,
+    "dateupdated": "2018-09-03",
+    "serial" : 0,
     "jitbyhost" : [
         {
             "host" : "ahost",
@@ -16,7 +17,28 @@
         "auser" : {"uid": 2000, "keys" : "ssh-rsa KEY COMMENT" },
         "auser2": {"uid": 2001, "shell": "/bin/zsh", "keys" : "ssh-rsa KEY COMMENT" }
     },
-    "numsigsreq" : 2,
+    "numsigsreq" : {
+        "jitbyhost":{
+            "add": 1,
+            "remove": 1
+        },
+        "users":{
+            "add": 2,
+            "remove": 1
+        },
+        "certs":{
+            "add": 2,
+            "remove": 2
+        }, 
+        "urls":{
+            "add": 2,
+            "remove": -1
+        },
+        "default":{
+            "add": 1,
+            "remove": 1
+        }
+    },
     "certs" : [
         "-----BEGIN CERTIFICATE-----\nNEWLINESEPERATEDPUBLICKEYMAXLENGTH76PERLINE\n-----END CERTIFICATE-----"
     ],
